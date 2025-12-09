@@ -29,13 +29,6 @@ body {
     min-height: 100vh;
     transition: background-color 0.3s, color 0.3s;
     overflow-x: hidden;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
 }
 
 body.dark-mode {
@@ -46,11 +39,9 @@ body.dark-mode {
 .container {
     max-width: 600px;
     margin: 0 auto;
-    height: calc(100vh - 40px);
+    min-height: calc(100vh - 40px);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    position: relative;
 }
 
 /* Уведомления */
@@ -115,8 +106,7 @@ body.dark-mode .notification {
     flex-direction: column;
     flex-grow: 1;
     animation: fadeIn 0.3s ease;
-    overflow-y: auto;
-    max-height: 100%;
+    height: 100%;
 }
 
 .active-page {
@@ -399,12 +389,24 @@ body.dark-mode .btn-nav {
     gap: 10px;
 }
 
-/* О проекте */
+/* О проекте - ИСПРАВЛЕННЫЙ БЛОК */
+#page-about {
+    display: none;
+    flex-direction: column;
+}
+
+#page-about.active-page {
+    display: flex;
+}
+
 .about-content {
     background: var(--card-color);
     border-radius: 15px;
     padding: 22px;
-    margin: 15px 0;
+    margin: 15px 0 20px 0;
+    flex-grow: 1;
+    overflow-y: auto; /* ВКЛЮЧАЕМ ПРОКРУТКУ */
+    max-height: calc(100vh - 200px);
 }
 
 body.dark-mode .about-content {
@@ -447,6 +449,24 @@ body.dark-mode .about-content {
 .about-content p {
     margin-bottom: 1em;
     line-height: 1.5;
+}
+
+.important-notice {
+    background: rgba(255, 68, 68, 0.1);
+    border: 2px solid var(--warning-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.important-notice p {
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.important-notice p:last-child {
+    margin-bottom: 0;
 }
 
 .warning-list {
@@ -531,6 +551,7 @@ body.dark-mode .footer-info {
     
     .about-content {
         padding: 18px;
+        max-height: calc(100vh - 180px);
     }
     
     #notification-container {
@@ -563,6 +584,10 @@ body.dark-mode .footer-info {
     .chapter-content {
         padding: 16px;
     }
+    
+    .about-content {
+        max-height: calc(100vh - 150px);
+    }
 }
 
 /* Скроллбар */
@@ -589,4 +614,9 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
     background: #666;
+}
+
+/* Предотвращаем скролл всего тела на странице "О проекте" */
+#page-about {
+    overflow: hidden;
 }
