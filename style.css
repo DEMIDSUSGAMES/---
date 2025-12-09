@@ -9,6 +9,8 @@
     --dark-bg: #1a1a1a;
     --dark-text: #e0e0e0;
     --dark-card: #2d2d2d;
+    --warning-color: #ff4444;
+    --success-color: #4caf50;
 }
 
 * {
@@ -26,6 +28,14 @@ body {
     padding: 20px;
     min-height: 100vh;
     transition: background-color 0.3s, color 0.3s;
+    overflow-x: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 body.dark-mode {
@@ -36,9 +46,67 @@ body.dark-mode {
 .container {
     max-width: 600px;
     margin: 0 auto;
-    min-height: calc(100vh - 40px);
+    height: calc(100vh - 40px);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Уведомления */
+#notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 300px;
+    pointer-events: none;
+}
+
+.notification {
+    background: var(--card-color);
+    border-left: 4px solid var(--primary-color);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideInRight 0.3s ease, slideOutLeft 0.3s ease 2.7s forwards;
+    transform: translateX(120%);
+    opacity: 0;
+}
+
+body.dark-mode .notification {
+    background: var(--dark-card);
+}
+
+.notification.success {
+    border-left-color: var(--success-color);
+}
+
+.notification.warning {
+    border-left-color: var(--warning-color);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-120%);
+        opacity: 0;
+    }
 }
 
 /* Страницы */
@@ -47,6 +115,8 @@ body.dark-mode {
     flex-direction: column;
     flex-grow: 1;
     animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .active-page {
@@ -54,15 +124,15 @@ body.dark-mode {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Главное меню */
 .book-cover {
     font-size: 5em;
     text-align: center;
-    margin: 40px 0 20px;
+    margin: 30px 0 15px;
     animation: float 3s ease-in-out infinite;
 }
 
@@ -74,88 +144,94 @@ body.dark-mode {
 .subtitle {
     text-align: center;
     color: var(--secondary-color);
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     font-size: 1.1em;
 }
 
-/* Карточки фанфиков */
-.fanfic-card {
+/* Карточки авторов и фанфиков */
+.author-card, .fanfic-card {
     background: var(--card-color);
     border-radius: 15px;
-    padding: 20px;
-    margin: 15px 0;
+    padding: 18px;
+    margin: 12px 0;
     display: flex;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s;
     border: 2px solid transparent;
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
+body.dark-mode .author-card,
 body.dark-mode .fanfic-card {
     background: var(--dark-card);
+    border-color: #444;
 }
 
-.fanfic-card:hover {
-    transform: translateY(-2px);
+.author-card:hover, .fanfic-card:hover {
+    transform: translateY(-3px);
     border-color: var(--primary-color);
     box-shadow: 0 6px 16px var(--shadow-color);
 }
 
-.fanfic-icon {
-    font-size: 2.5em;
-    margin-right: 20px;
-    min-width: 60px;
+.author-card:active, .fanfic-card:active {
+    transform: translateY(-1px);
+}
+
+.author-icon, .fanfic-icon {
+    font-size: 2.2em;
+    margin-right: 18px;
+    min-width: 55px;
     text-align: center;
 }
 
-.fanfic-info h3 {
+.author-info h3, .fanfic-info h3 {
     color: var(--primary-color);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    font-size: 1.2em;
 }
 
+body.dark-mode .author-info h3,
 body.dark-mode .fanfic-info h3 {
     color: #ffa726;
 }
 
-.fanfic-info p {
+.author-info p, .fanfic-info p {
     color: #666;
-    font-size: 0.95em;
+    font-size: 0.9em;
     margin-bottom: 8px;
+    line-height: 1.4;
 }
 
+body.dark-mode .author-info p,
 body.dark-mode .fanfic-info p {
     color: #aaa;
 }
 
-.chapters {
+.count, .chapters {
     display: inline-block;
     background: var(--primary-color);
     color: white;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 12px;
     font-size: 0.8em;
     font-weight: bold;
 }
 
-.coming-soon {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.coming-soon:hover {
-    transform: none;
-    border-color: transparent;
-}
-
 /* Читалка */
 .reading-header {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e6d9c6;
+}
+
+body.dark-mode .reading-header {
+    border-bottom-color: #444;
 }
 
 .chapter-progress {
-    margin-top: 15px;
+    margin-top: 12px;
 }
 
 .progress-text {
@@ -163,11 +239,12 @@ body.dark-mode .fanfic-info p {
     margin-bottom: 8px;
     font-weight: bold;
     color: var(--secondary-color);
+    font-size: 0.9em;
 }
 
 .progress-bar {
     width: 100%;
-    height: 6px;
+    height: 5px;
     background: #e0d0b8;
     border-radius: 3px;
     overflow: hidden;
@@ -181,19 +258,20 @@ body.dark-mode .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     border-radius: 3px;
-    transition: width 0.3s;
+    transition: width 0.3s ease;
 }
 
 .chapter-content {
     background: var(--card-color);
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: 12px;
+    padding: 20px;
     margin: 15px 0;
     flex-grow: 1;
     overflow-y: auto;
-    line-height: 1.8;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    line-height: 1.7;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
     border: 1px solid #e6d9c6;
+    font-size: 1.05em;
 }
 
 body.dark-mode .chapter-content {
@@ -202,7 +280,7 @@ body.dark-mode .chapter-content {
 }
 
 .chapter-content p {
-    margin-bottom: 1.2em;
+    margin-bottom: 1.3em;
     text-indent: 1.5em;
     text-align: justify;
 }
@@ -218,52 +296,59 @@ body.dark-mode .chapter-content strong {
 
 /* Кнопки */
 .btn {
-    padding: 16px 24px;
+    padding: 16px 20px;
     border: none;
-    border-radius: 12px;
-    font-size: 1.1em;
+    border-radius: 10px;
+    font-size: 1em;
     cursor: pointer;
     transition: all 0.3s;
     text-align: center;
     font-weight: bold;
     display: block;
     width: 100%;
-    margin: 10px 0;
+    margin: 8px 0;
     text-decoration: none;
+    font-family: inherit;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.25);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+    box-shadow: 0 6px 18px rgba(139, 69, 19, 0.35);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .btn-secondary {
     background: #6d7b8c;
     color: white;
-    box-shadow: 0 4px 15px rgba(109, 123, 140, 0.3);
+    box-shadow: 0 4px 12px rgba(109, 123, 140, 0.25);
 }
 
 .btn-secondary:hover {
     background: #7d8b9c;
     transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(109, 123, 140, 0.35);
 }
 
 .btn-back {
     background: transparent;
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .btn-back:hover {
     background: var(--primary-color);
     color: white;
+    transform: translateY(-2px);
 }
 
 .btn-nav {
@@ -272,6 +357,7 @@ body.dark-mode .chapter-content strong {
     border: 2px solid var(--primary-color);
     flex: 1;
     margin: 0 5px;
+    padding: 14px 12px;
 }
 
 body.dark-mode .btn-nav {
@@ -286,9 +372,10 @@ body.dark-mode .btn-nav {
 .btn-action {
     background: #5d8aa8;
     color: white;
-    padding: 12px 20px;
-    font-size: 1em;
+    padding: 14px 16px;
+    font-size: 0.95em;
     margin: 5px;
+    flex: 1;
 }
 
 .btn-action:hover {
@@ -296,28 +383,15 @@ body.dark-mode .btn-nav {
     transform: translateY(-2px);
 }
 
-.btn-github {
-    background: #333;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.btn-github:hover {
-    background: #444;
-}
-
 /* Навигация */
 .nav-buttons {
     display: flex;
     gap: 10px;
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .reading-controls {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .reading-actions {
@@ -329,35 +403,89 @@ body.dark-mode .btn-nav {
 .about-content {
     background: var(--card-color);
     border-radius: 15px;
-    padding: 25px;
-    margin: 20px 0;
+    padding: 22px;
+    margin: 15px 0;
 }
 
 body.dark-mode .about-content {
     background: var(--dark-card);
 }
 
+.warning-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 68, 68, 0.1);
+    border: 2px solid var(--warning-color);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.warning-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.warning-text {
+    color: var(--warning-color);
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
 .about-content h3 {
     color: var(--primary-color);
-    margin: 20px 0 10px;
+    margin: 18px 0 10px;
+    font-size: 1.1em;
 }
 
 .about-content h3:first-child {
-    margin-top: 0;
+    margin-top: 5px;
 }
 
-.github-link {
-    margin: 30px 0;
+.about-content p {
+    margin-bottom: 1em;
+    line-height: 1.5;
+}
+
+.warning-list {
+    margin: 15px 0 15px 20px;
+    color: #666;
+}
+
+body.dark-mode .warning-list {
+    color: #aaa;
+}
+
+.warning-list li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.safety-notice {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid var(--success-color);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+body.dark-mode .safety-notice {
+    background: rgba(76, 175, 80, 0.15);
 }
 
 /* Футер */
 .footer-info {
     text-align: center;
-    margin-top: 30px;
-    padding-top: 20px;
+    margin-top: 20px;
+    padding-top: 15px;
     border-top: 1px solid #e0d0b8;
     color: #888;
-    font-size: 0.9em;
+    font-size: 0.85em;
+    flex-shrink: 0;
 }
 
 body.dark-mode .footer-info {
@@ -378,19 +506,87 @@ body.dark-mode .footer-info {
     
     .book-cover {
         font-size: 4em;
-        margin: 30px 0 15px;
+        margin: 25px 0 15px;
     }
     
     .chapter-content {
-        padding: 20px;
+        padding: 18px;
+        font-size: 1em;
     }
     
     .btn {
-        padding: 14px 20px;
-        font-size: 1em;
+        padding: 14px 16px;
+        font-size: 0.95em;
     }
     
     .reading-actions {
         flex-direction: column;
     }
+    
+    .author-icon, .fanfic-icon {
+        font-size: 2em;
+        margin-right: 15px;
+        min-width: 50px;
+    }
+    
+    .about-content {
+        padding: 18px;
+    }
+    
+    #notification-container {
+        right: 10px;
+        top: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .notification {
+        padding: 12px 16px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-height: 700px) {
+    .book-cover {
+        margin: 20px 0 10px;
+        font-size: 3.5em;
+    }
+    
+    .subtitle {
+        margin-bottom: 20px;
+    }
+    
+    .author-card, .fanfic-card {
+        padding: 14px;
+        margin: 8px 0;
+    }
+    
+    .chapter-content {
+        padding: 16px;
+    }
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #666;
 }
