@@ -107,6 +107,7 @@ body.dark-mode .notification {
     flex-grow: 1;
     animation: fadeIn 0.3s ease;
     height: 100%;
+    overflow-y: auto;
 }
 
 .active-page {
@@ -209,11 +210,22 @@ body.dark-mode .fanfic-info p {
 }
 
 /* Читалка */
+#page-reading {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+
+#page-reading.active-page {
+    display: flex;
+}
+
 .reading-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #e6d9c6;
+    flex-shrink: 0;
 }
 
 body.dark-mode .reading-header {
@@ -262,6 +274,7 @@ body.dark-mode .progress-bar {
     box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
     border: 1px solid #e6d9c6;
     font-size: 1.05em;
+    min-height: 300px;
 }
 
 body.dark-mode .chapter-content {
@@ -282,6 +295,11 @@ body.dark-mode .chapter-content {
 
 body.dark-mode .chapter-content strong {
     color: #ffa726;
+}
+
+.reading-controls {
+    margin-top: 15px;
+    flex-shrink: 0;
 }
 
 /* Кнопки */
@@ -373,6 +391,23 @@ body.dark-mode .btn-nav {
     transform: translateY(-2px);
 }
 
+.btn-small {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    width: auto;
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin: 0;
+}
+
+.btn-small:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
 /* Навигация */
 .nav-buttons {
     display: flex;
@@ -380,33 +415,63 @@ body.dark-mode .btn-nav {
     margin: 15px 0;
 }
 
-.reading-controls {
-    margin-top: 15px;
-}
-
 .reading-actions {
     display: flex;
     gap: 10px;
 }
 
-/* О проекте - ИСПРАВЛЕННЫЙ БЛОК */
-#page-about {
-    display: none;
-    flex-direction: column;
+/* О авторах */
+.author-description {
+    background: var(--card-color);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 15px 0 25px 0;
+    text-align: center;
 }
 
-#page-about.active-page {
+body.dark-mode .author-description {
+    background: var(--dark-card);
+}
+
+.author-avatar {
+    font-size: 4em;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.author-description h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+.author-info-header {
     display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
 }
 
+.theme-list {
+    margin: 15px 0 20px 20px;
+    text-align: left;
+}
+
+.theme-list li {
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: #666;
+}
+
+body.dark-mode .theme-list li {
+    color: #aaa;
+}
+
+/* О проекте */
 .about-content {
     background: var(--card-color);
     border-radius: 15px;
     padding: 22px;
-    margin: 15px 0 20px 0;
-    flex-grow: 1;
-    overflow-y: auto; /* ВКЛЮЧАЕМ ПРОКРУТКУ */
-    max-height: calc(100vh - 200px);
+    margin: 15px 0;
 }
 
 body.dark-mode .about-content {
@@ -551,7 +616,6 @@ body.dark-mode .footer-info {
     
     .about-content {
         padding: 18px;
-        max-height: calc(100vh - 180px);
     }
     
     #notification-container {
@@ -583,10 +647,7 @@ body.dark-mode .footer-info {
     
     .chapter-content {
         padding: 16px;
-    }
-    
-    .about-content {
-        max-height: calc(100vh - 150px);
+        min-height: 250px;
     }
 }
 
@@ -614,85 +675,4 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
     background: #666;
-}
-
-/* Предотвращаем скролл всего тела на странице "О проекте" */
-#page-about {
-    overflow: hidden;
-}
-/* Добавьте эти стили в конец файла style.css */
-
-/* О авторах */
-.author-description {
-    background: var(--card-color);
-    border-radius: 15px;
-    padding: 25px;
-    margin: 15px 0 25px 0;
-    text-align: center;
-}
-
-body.dark-mode .author-description {
-    background: var(--dark-card);
-}
-
-.author-avatar {
-    font-size: 4em;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-}
-
-.author-description h2 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 1.4em;
-}
-
-.author-info-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-}
-
-.btn-small {
-    padding: 10px 20px;
-    font-size: 0.9em;
-    width: auto;
-    display: inline-block;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-}
-
-.btn-small:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
-}
-
-.theme-list {
-    margin: 15px 0 20px 20px;
-    text-align: left;
-}
-
-.theme-list li {
-    margin-bottom: 10px;
-    line-height: 1.4;
-    color: #666;
-}
-
-body.dark-mode .theme-list li {
-    color: #aaa;
-}
-
-/* Для страниц "О Диме" и "О Демиде" */
-#page-about-dima .about-content,
-#page-about-demid .about-content {
-    margin-top: 20px;
-    text-align: left;
-}
-
-#page-about-dima h3,
-#page-about-demid h3 {
-    margin-top: 25px;
-    color: var(--secondary-color);
 }
